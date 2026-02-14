@@ -39,14 +39,13 @@ function getCurrentTime(){
     const date = new Date("2/11/2025 00:00:00"); 
     const ms = Date.now() - date.getTime();
 
-    // 2. Calculate time components
-    const totalDays = Math.floor(ms / (24 * 3600 * 1000));
-    const hrM = abso(ms / (24 * 3600 * 1000)) * 24;
-    const hr = Math.floor(hrM);
-    const minM = abso(hrM) * 60;
-    const min = Math.floor(minM);
-    const secM = abso(minM) * 60;
-    const sec = Math.floor(secM);
+// 2. Calculate time components
+const totalSeconds = Math.floor(ms / 1000);
+const sec = totalSeconds % 60;
+const totalMinutes = Math.floor(totalSeconds / 60);
+const min = totalMinutes % 60;
+const totalHours = Math.floor(totalMinutes / 60);
+const hr = totalHours % 24;
 
     // 3. Display time in HTML
     dhr.innerText = ten(hr);
@@ -223,3 +222,6 @@ photosArr.forEach((p)=>{
     galOv.classList.add('show-galbig')
   })
 })
+function ten(num) {
+    return num < 10 ? "0" + num : num;
+}
