@@ -35,58 +35,45 @@ const dsec= document.getElementById("sec");
 
 
 function getCurrentTime(){
-    // 1. Set your anniversary date (Month/Day/Year)
     const date = new Date("2/11/2025 00:00:00"); 
     const ms = Date.now() - date.getTime();
 
-// 2. Calculate time components
-const totalSeconds = Math.floor(ms / 1000);
-const sec = totalSeconds % 60;
-const totalMinutes = Math.floor(totalSeconds / 60);
-const min = totalMinutes % 60;
-const totalHours = Math.floor(totalMinutes / 60);
-const hr = totalHours % 24;
+    // Correct way to get hours, minutes, seconds using modulo (%)
+    const totalSeconds = Math.floor(ms / 1000);
+    const sec = totalSeconds % 60;
+    const totalMinutes = Math.floor(totalSeconds / 60);
+    const min = totalMinutes % 60;
+    const totalHours = Math.floor(totalMinutes / 60);
+    const hr = totalHours % 24;
 
-    // 3. Display time in HTML
+    // Display time in HTML
     dhr.innerText = ten(hr);
     dmin.innerText = ten(min);
     dsec.innerText = ten(sec);
 
     let cDate = new Date();
-    let cMonth = cDate.getMonth() + 1; // Current month (1-12)
+    let cMonth = cDate.getMonth() + 1; 
     let cYear = cDate.getFullYear();
     
-    // ADJUSTED: Using cMonth directly to prevent extra month count
-    let timeC = dateRange(2025, 2, cYear, cMonth);
+    // Logic for years and months
+    let totalMonths = (cYear - 2025) * 12 + (cMonth - 2);
+    if (cDate.getDate() < 11) totalMonths--; // Adjust if current day hasn't reached the 11th yet
 
-    // 4. Calculate Years and Months
-    // Subtract 1 from length because dateRange includes the start month
-    let actualMonths = timeC.length - 1;
-    let countYear = Math.floor(actualMonths / 12);
-    let countMonth = (actualMonths % 12);
+    let countYear = Math.floor(totalMonths / 12);
+    let countMonth = totalMonths % 12;
 
-    // 5. FIXED WEEK & DAY LOGIC
-    // Calculate days remaining in the CURRENT month specifically
+    // Days calculation (Today is Feb 15, so 15 - 11 = 4 days)
     let startDay = 11;
     let currentDay = cDate.getDate();
-    let daysDiff;
-
-    if (currentDay >= startDay) {
-        daysDiff = currentDay - startDay;
-    } else {
-        // Handle cases where current day is earlier in the month than the 11th
-        let prevMonthDays = new Date(cYear, cMonth - 1, 0).getDate();
-        daysDiff = prevMonthDays - startDay + currentDay;
-    }
+    let daysDiff = currentDay >= startDay ? currentDay - startDay : 0; 
 
     let countWeek = Math.floor(daysDiff / 7);
     let countDays = daysDiff % 7;
 
-    // 6. Formatting leading zeros
-    dy.innerText = countYear < 10 ? "0" + countYear : countYear;
-    dm.innerText = countMonth < 10 ? "0" + countMonth : countMonth;
-    dw.innerText = countWeek < 10 ? "0" + countWeek : countWeek;
-    d.innerText = countDays < 10 ? "0" + countDays : countDays;
+    dy.innerText = ten(countYear);
+    dm.innerText = ten(countMonth);
+    dw.innerText = ten(countWeek);
+    d.innerText = ten(countDays);
 }
 function dateRange(startYear,startM, endYear,endM) {
    
